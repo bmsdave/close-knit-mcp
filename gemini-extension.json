@@ -1,0 +1,11 @@
+{
+  "name": "close-knit-mcp",
+  "version": "1.0.0",
+  "description": "Evidence about London neighbourhoods and homes: prices, rents, crime, schools, flood risk and commutes from official open data.",
+  "mcpServers": {
+    "close-knit": {
+      "httpUrl": "https://getcloseknit.com/mcp"
+    }
+  },
+  "contextFileName": "GEMINI.md"
+}
