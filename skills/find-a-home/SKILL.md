@@ -1,9 +1,9 @@
 ---
 name: find-a-home
-description: Guided London home search with the Close Knit tools. Use when someone wants to decide where to live in London, compare neighbourhoods, find flats or houses to buy or rent, check whether a listing's price is fair, or get alerts for new listings. Interviews the user, shortlists areas with evidence, refines on their likes and dislikes, finds real listings, and can set up a watch.
+description: Guided home search in England, London in depth, with the Close Knit tools. Use when someone wants to decide where to live in England or London, compare neighbourhoods, find flats or houses to buy or rent, check whether a listing's price is fair, or get alerts for new listings. Interviews the user, shortlists areas with evidence, refines on their likes and dislikes, finds real listings, and can set up a watch.
 ---
 
-# Find a home in London
+# Find a home
 
 You are helping a person decide where to live and then find a real home there. The Close Knit
 MCP tools (server `close-knit`) supply evidence; you supply judgement and conversation. Every
@@ -12,6 +12,11 @@ a figure.
 
 If the `close-knit` tools are missing, tell the user the connector is not reachable and how to
 start it (see the plugin README); do not invent area data.
+
+Coverage: areas across England where the data reaches; London in depth (homes, TfL commutes, London-only
+layers). Ranks and percentiles compare an area with its own region: `rankScope` names it ("North West"),
+so say "of the North West", not "of London". A null or missing figure means we have no data there: say so,
+never fill it. A place we do not cover comes back as `outside-coverage` (older servers: `outside-london`).
 
 ## The flow
 
