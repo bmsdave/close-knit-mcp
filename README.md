@@ -1,5 +1,9 @@
 # Close Knit MCP server
 
+[![Official MCP Registry](https://img.shields.io/badge/MCP_Registry-com.getcloseknit%2Fclose--knit-blue)](https://registry.modelcontextprotocol.io/v0.1/servers?search=com.getcloseknit)
+[![Close Knit MCP server on Glama](https://glama.ai/mcp/servers/bmsdave/close-knit-mcp/badges/score.svg)](https://glama.ai/mcp/servers/bmsdave/close-knit-mcp)
+[![Listed on mcpservers.org](https://mcpservers.org/badge.svg)](https://mcpservers.org/servers/bmsdave/close-knit-mcp)
+
 Close Knit gives AI assistants evidence about neighbourhoods and homes in London and England, to help people choose where to live. It is a remote MCP server: recorded sale prices, rents, crime, schools, flood risk, commute times, noise and more, from official open data. Every tool answer is an evidence envelope with a `value`, a `confidence`, the `evidence[]` behind it, its `sources[]` (with licence) and `caveats[]`. London is covered in depth, with area data across England. It is free, with no account or sign-in. Website: https://getcloseknit.com · Setup for every assistant: https://getcloseknit.com/agents.
 
 ```
