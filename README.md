@@ -4,7 +4,7 @@
 [![Close Knit MCP server on Glama](https://glama.ai/mcp/servers/bmsdave/close-knit-mcp/badges/score.svg)](https://glama.ai/mcp/servers/bmsdave/close-knit-mcp)
 [![Listed on mcpservers.org](https://mcpservers.org/badge.svg)](https://mcpservers.org/servers/bmsdave/close-knit-mcp)
 
-Close Knit gives AI assistants evidence about neighbourhoods and homes in London and England, to help people choose where to live. It is a remote MCP server: recorded sale prices, rents, crime, schools, flood risk, commute times, noise and more, from official open data. Every tool answer is an evidence envelope with a `value`, a `confidence`, the `evidence[]` behind it, its `sources[]` (with licence) and `caveats[]`. London is covered in depth, with area data across England. It is free, with no account or sign-in. Website: https://getcloseknit.com · Setup for every assistant: https://getcloseknit.com/agents.
+Close Knit gives AI assistants evidence about neighbourhoods and homes in England, with London in depth, to help people choose where to live. It is a remote MCP server: recorded sale prices, rents, crime, schools, flood risk, commute times, noise and more, from official open data. Every tool answer is an evidence envelope with a `value`, a `confidence`, the `evidence[]` behind it, its `sources[]` (with licence) and `caveats[]`. Every neighbourhood and local authority in England is covered; London adds address-level sale history, door-to-door TfL commute times and London-only layers. Ranks and percentiles compare an area with its own region (`rankScope` names it). It is free, with no account or sign-in. Website: https://getcloseknit.com · Setup for every assistant: https://getcloseknit.com/agents.
 
 ```
 https://getcloseknit.com/mcp
@@ -28,8 +28,8 @@ https://getcloseknit.com/mcp
 | | `get_area_overview` | One neighbourhood in detail: local market, schools, noise, price trend. |
 | | `get_area_evidence_pack` | One cited evidence pack for an area: market depth, crime, noise, schools and more. |
 | | `list_metrics` | Every area metric served, with unit, direction, periods and provenance. |
-| | `get_area_metric` | One metric for one area and month, with London and England percentiles. |
-| | `rank_areas_by_metric` | Rank all areas by one metric and return the top N. |
+| | `get_area_metric` | One metric for one area and month, with percentiles within its region and across England. |
+| | `rank_areas_by_metric` | Rank all areas, or one region's, by one metric and return the top N. |
 | | `get_flood_risk` | Flood bands for an area's land and, with a UPRN, for one home. |
 | | `get_rent_levels` | Median monthly rent by bedroom count. |
 | Homes and prices | `get_home_prices` | One home's recorded sales and the range of prices in its area today. |
@@ -41,6 +41,8 @@ https://getcloseknit.com/mcp
 | | `build_watch_spec` | Turn a finished search into a watch for new listings. |
 | Your own criteria | `list_custom_presets` | Ready-made criteria built from places on OpenStreetMap. |
 | | `evaluate_custom_criterion` | Evaluate a criterion such as "more cafés than kebab shops" for every neighbourhood. |
+| Schools | `rank_schools` | Rank schools on weighted measures near a point, in one council, one region or England. |
+| | `list_school_measures` | The school measures `rank_schools` can rank by. |
 | Feedback | `send_feedback` | Send feedback to the Close Knit team, only after the user agrees. |
 
 ## Add Close Knit to your assistant
@@ -59,6 +61,15 @@ On Team and Enterprise plans an owner adds it under **Organization settings > Co
 
 ```bash
 claude mcp add --transport http close-knit https://getcloseknit.com/mcp
+```
+
+### Codex
+
+Add to `~/.codex/config.toml` and restart Codex:
+
+```toml
+[mcp_servers.close_knit]
+url = "https://getcloseknit.com/mcp"
 ```
 
 ### ChatGPT
@@ -195,9 +206,21 @@ Or open the **Program** tab in the right-hand sidebar, click **Install > Edit mc
 }
 ```
 
+## Example answers
+
+Answers from the live server, October 2026. Figures change with each data release.
+
+**"How much crime is there around Clapham Junction?"** `search_areas` finds the neighbourhood (Wandsworth 012A, SW11) and `get_area_metric(crime)` answers: 74.4 recorded crimes per 1,000 residents in the 12 months to August 2026, a higher rate than 58% of London's neighbourhoods and 65% of England's; the largest categories are violence and sexual offences and anti-social behaviour. Source: police.uk street crime, Open Government Licence v3.0. Confidence high (observed, not modelled).
+
+**"Where in the North West are homes cheapest per square metre?"** `rank_areas_by_metric` with `region: "North West"` puts three Blackpool neighbourhoods first at £970/m², tied. Confidence medium: they had too few sales of their own, so the figure is their MSOA's (`quality: "fallback"`). Source: HM Land Registry Price Paid with EPC floor areas.
+
+**"Help me find a 2-bed flat to buy in London under £600k, within 30 minutes of King's Cross."** `search_places` resolves King's Cross, `find_areas` returns a ranked shortlist with each area's standing, what it meets ("4 of 5"), its commute and ballpark price, and an "Open in Close Knit" link to the same search on the map; `get_listing_search_links` then opens pre-filtered searches on the property portals.
+
+Every tool, with its full input schema, is also listed in the server card: https://getcloseknit.com/.well-known/mcp/server-card.json.
+
 ## Data and licences
 
-The answers come from official open data, mostly under the Open Government Licence v3.0: HM Land Registry Price Paid Data and UK House Price Index, ONS Census 2021 and other ONS statistics, police.uk street crime, Ofsted and Department for Education school data, Environment Agency flood risk, Defra noise maps, Ordnance Survey OpenData, Transport for London open data ("Powered by TfL Open Data") and OpenStreetMap (© OpenStreetMap contributors, ODbL 1.0). Each answer lists its own sources and licences in `sources[]`; keep those attributions when you reuse the data.
+The answers come from official open data, mostly under the Open Government Licence v3.0: HM Land Registry Price Paid Data and UK House Price Index, ONS Census 2021 and other ONS statistics, police.uk street crime, Ofsted and Department for Education school data, Environment Agency flood risk, Defra noise maps, Ofcom broadband coverage, MHCLG deprivation (IMD 2025) and planning data, Ordnance Survey OpenData, Transport for London open data ("Powered by TfL Open Data") and OpenStreetMap (© OpenStreetMap contributors, ODbL 1.0). Each answer lists its own sources and licences in `sources[]`; keep those attributions when you reuse the data.
 
 The MIT licence in this repository covers the files in this repository only. The data served by the MCP server keeps its own licences.
 
